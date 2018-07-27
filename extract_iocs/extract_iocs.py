@@ -39,7 +39,7 @@ def _load_regexes(regex_file_path):
                 ind_pattern = ind_pattern + config.get('domain', 'regex')
 
             # compile the regex for the current indicator type
-            ind_regex = re.compile(ind_pattern)
+            ind_regex = re.compile(ind_pattern, re.IGNORECASE)
             # keep track of the regex for this indicator type
             indicator_regexes[ind_type] = ind_regex
             # keep track of the indicator type so that indicators are parsed in the same order that the regexes are listed in regexes.ini
@@ -127,6 +127,7 @@ def _extract_iocs(text, confidence_modifier):
                 iocs['email'].append(match.string[match.start():match.end()].replace('[', '').replace(']', ''))
             elif indicator_type == "url":
                 # support for urls coming soon
+                iocs['url'].append(match.string[match.start():match.end()].replace('[', '').replace(']', ''))
                 pass
             else:
                 print("Unknown indicator type: {}".format(indicator_type))
